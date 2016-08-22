@@ -13,6 +13,10 @@
             "value": 43.47619402985075
         }, 
         {
+            "property": "molecular_weight", 
+            "value": 30181.520999999997
+        }, 
+        {
             "property": "folding", 
             "value": {
                 "energy": -224.0, 

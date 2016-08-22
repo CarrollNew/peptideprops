@@ -4,6 +4,7 @@
 		{"name": "extinction_coefficient"},
 		{"name": "isoelectric_point"},
 		{"name": "instability_index"},
+		{"name": "molecular_weight"},
 		{"name": "folding"}
 	]
 }

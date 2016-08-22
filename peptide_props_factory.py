@@ -1,4 +1,6 @@
-from sequence_property import ExtinctionCoefficient, IsoelectricPoint, InstabilityIndex
+from sequence_property import (
+	ExtinctionCoefficient, IsoelectricPoint, InstabilityIndex, MolecularWeight
+	)
 from sequence_property import FoldingMFE
 
 
@@ -7,6 +9,7 @@ class PeptidePropsFactory(object):
 		'extinction_coefficient': ExtinctionCoefficient,
 		'isoelectric_point': IsoelectricPoint,
 		'instability_index': InstabilityIndex,
+		'molecular_weight': MolecularWeight,
 		'folding': FoldingMFE
 	}
 
@@ -14,6 +17,7 @@ class PeptidePropsFactory(object):
 		'ext_coef': 'extinction_coefficient',
 		'pHI': 'isoelectric_point',
 		'II': 'instability_index',
+		'mw': 'molecular_weight',
 		'folding': 'folding'
 	}
 
