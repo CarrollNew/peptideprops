@@ -13,17 +13,18 @@ def _read_params(fn):
 		return loads(f.read())
 
 
-def _write_result(out_fn, rna_seq, results):
-	result_dict = {'sequence': rna_to_aa(rna_seq), 'results': results}
+def write_result(out_fn, result):
 	with open(out_fn, 'w') as f:
-		f.write(dumps(result_dict, indent=4))
+		f.write(dumps(result, indent=4))
 
 
-def main(args):
-	in_fn = args[0]
-	out_fn = args[1]
-	params = _read_params(in_fn)
+def process(params):
 	rna_seq = params['sequence']
+	try:
+		aa_seq = rna_to_aa(rna_seq)
+	except StandardError as e:
+		return {'error': 'Invalid RNA sequence.', 'message': e.message}
+
 	results = []
 	for prop in params['properties']:
 		try:
@@ -35,7 +36,15 @@ def main(args):
 			print 'Could not calculate property: {}'.format(prop['name'])
 			value = None
 		results.append({'property': prop['name'], 'value': value})
-	_write_result(out_fn, rna_seq, results)
+	result_dict = {'sequence': rna_to_aa(rna_seq), 'results': results}
+	return result_dict
+
+
+def main(args):
+	in_fn = args[0]
+	out_fn = args[1]
+	result = process(_read_params(in_fn))
+	write_result(out_fn, result)
 
 
 if __name__ == '__main__':

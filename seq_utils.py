@@ -2,7 +2,7 @@
 Auxilliary routines for DNA/RNA/AA sequences processing.
 """
 
-from Bio.Seq import Seq
+# from Bio.Seq import Seq
 
 
 DNA_LETTERS = list('ACGT')
@@ -25,8 +25,13 @@ rna_stop_codons = ['UAA', 'UAG', 'UGA']
 
 
 def rna_to_aa(seq):
-	assert len(seq) % 3 == 0
-	assert all(map(lambda x: x in RNA_LETTERS, seq))
+	assert len(seq) > 0, 'Empty sequence.'
+	assert len(seq) % 3 == 0, 'Sequence length is not product of 3.'
+	assert all(map(lambda x: x in RNA_LETTERS, seq)), 'Not an RNA sequence.'
+	assert all(map(
+		lambda codon: codon not in rna_stop_codons,
+		map(lambda i: seq[i:i+3], xrange(0, len(seq), 3))
+	)), 'Sequence should not contain stop codons.'
 
 	return ''.join(map(
 		lambda codon: rna_codon_table[codon], 
@@ -35,12 +40,12 @@ def rna_to_aa(seq):
 
 
 def dna_to_rna(seq):
-	assert all(map(lambda x: x in DNA_LETTERS, seq))
+	assert all(map(lambda x: x in DNA_LETTERS, seq)), 'Not an DNA sequence.'
 	
 	return seq.replace('T', 'U')
 
 
 def dna_to_aa(seq):
-	assert all(map(lambda x: x in DNA_LETTERS, seq))
+	assert all(map(lambda x: x in DNA_LETTERS, seq)), 'Not an DNA sequence.'
 	
 	return rna_to_aa(dna_to_rna(seq))

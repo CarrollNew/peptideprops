@@ -92,7 +92,7 @@ class MolecularWeight(PeptideProperty):
 			    "Y": 181.1885
 			}
 
-		return _get_anisotopic_weights() if monoisotopic  else _get_weights()
+		return _get_monoisotopic_weights() if monoisotopic else _get_weights()
 
 	@staticmethod
 	def _get_water_weight(monoisotopic=False):
@@ -107,7 +107,7 @@ class InstabilityIndex(PeptideProperty):
 
 	def calculate_prop(self):
 		pairwise_weights = InstabilityIndex._get_dipeptide_weights()
-		sum_weights = sum([pairwise_weights[self.aa_seq[i:i+2]] for i in xrange(len(self.aa_seq) - 1)])
+		sum_weights = sum(map(lambda i: pairwise_weights[self.aa_seq[i:i+2]], xrange(len(self.aa_seq) - 1)))
 		return 10.0 * sum_weights / len(self.aa_seq)
 
 	@staticmethod
@@ -635,9 +635,8 @@ class ExtinctionCoefficient(PeptideProperty):
 			280: [1490, 5500, 125],
 			282: [1200, 5600, 100]
 		}
-		for nm_value in params_table:
-			if nm == nm_value:
-				return params_table[nm]
+		if nm in params_table:
+			return params_table[nm]
 		raise KeyError('Specified wavelength not found.')
 
 
@@ -645,7 +644,9 @@ class FoldingMFE(RNAProperty):
 	possible_rnafold_paths = [
 		'C://Program Files (x86)//ViennaRNA Package//RNAfold.exe',
 		'/usr/local/bin/ViennaRNA/RNAfold',
-		'/usr/bin/ViennaRNA/RNAfold'
+		'/usr/bin/ViennaRNA/RNAfold',
+		'/usr/bin/RNAfold',
+		'/usr/local/bin/RNAfold'
 	]
 
 	def __init__(self, rna_seq, params=None):
