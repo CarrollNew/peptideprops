@@ -99,7 +99,6 @@ class MolecularWeight(PeptideProperty):
 		return 18.010565 if monoisotopic else 18.0153
 
 
-
 class InstabilityIndex(PeptideProperty):
 	def __init__(self, rna_seq, params=None):
 		self.aa_seq = rna_to_aa(rna_seq)
