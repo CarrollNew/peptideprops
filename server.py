@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request, make_response, send_file, current_app
 from werkzeug.contrib.fixers import ProxyFix
 
 from main import process
+from plotter import RNAPlotter
 
 
 app = Flask(__name__)
@@ -59,6 +60,14 @@ def crossdomain(origin=None, methods=None, headers=None,
 def process_post_request():
 	params = request.get_json()
 	return jsonify(process(params))
+
+
+@app.route('/api/get_ss_image', methods=['POST'])
+@crossdomain(origin='*')
+def process_ss():
+    params = request.get_json()
+    plot_file_name = RNAPlotter.from_json(params)
+    return send_file(plot_file_name, as_attachment=True, attachment_filename=plot_file_name)
 
 
 if __name__ == '__main__':
