@@ -15,8 +15,9 @@ sudo cp -r usr/bin/* /usr/bin/ViennaRNA
 
 python main.py sample_data/sample_input.json sample_data/sample_output.json
 
-Testing requires BioPython installed.
+Testing requires BioPython and ViennaRNA installed.
 
-*possible test launch command:*
+*possible test launch commands:*
 
 python -m unittest discover . bio_tests.py
+python -m unittest discover . plotter.py
