@@ -20,4 +20,5 @@ Testing requires BioPython and ViennaRNA installed.
 *possible test launch commands:*
 
 python -m unittest discover . bio_tests.py
+
 python -m unittest discover . plotter.py
