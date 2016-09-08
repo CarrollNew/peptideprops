@@ -3,7 +3,7 @@ import abc
 import subprocess
 import tempfile
 
-from seq_utils import rna_to_aa, AA_LETTERS
+from seq_utils import rna_to_aa, AA_LETTERS, RNA_LETTERS
 
 
 class SequenceProperty(object):
@@ -657,6 +657,9 @@ class FoldingMFE(RNAProperty):
 		out_fasta = tempfile.gettempdir() + os.sep + 'rnafold_output'
 		self._write_input(in_fasta)
 		command = [FoldingMFE._get_rnafold_app(), '-i', in_fasta, '-o', out_fasta, '--noPS']
+		if self.params:
+			if 'temp' in self.params:
+				command.extend(['-T', str(self.params['temp'])])
 		
 		try:
 			subprocess.check_output(command, stderr=subprocess.STDOUT)
@@ -678,6 +681,13 @@ class FoldingMFE(RNAProperty):
 		energy = float(strs[-1][1:-1])
 		return {'folding': folding, 'energy': energy}
 
+	@staticmethod
+	def _validate(rna_seq, params):
+		assert all(map(lambda letter: letter in RNA_LETTERS, rna_seq)), 'Not an RNA sequence.'
+		if params:
+			if 'temp' in params:
+				assert isinstance(params['temp'], float) or isinstance(params['temp'], int),\
+					'RNA environment temperature should be a number.'
 
 	@staticmethod
 	def _get_rnafold_app():
