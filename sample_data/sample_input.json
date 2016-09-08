@@ -5,6 +5,9 @@
 		{"name": "isoelectric_point"},
 		{"name": "instability_index"},
 		{"name": "molecular_weight"},
-		{"name": "folding"}
+		{
+			"name": "folding", 
+			"settings": {"temp": 37}
+		}
 	]
 }

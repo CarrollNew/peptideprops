@@ -33,9 +33,11 @@ def process(params):
 	results = []
 	for prop in params['properties']:
 		try:
-			value = PeptidePropsFactory.from_prop_code(prop['name'])(rna_seq).calculate_prop()
+			value = PeptidePropsFactory.from_prop_code(prop['name'])(
+				rna_seq, prop.get('settings', {})).calculate_prop()
 		except KeyError as e:
-			value = PeptidePropsFactory.from_long_name(prop['name'])(rna_seq).calculate_prop()
+			value = PeptidePropsFactory.from_long_name(prop['name'])(
+				rna_seq, prop.get('settings', {})).calculate_prop()
 		except StandardError as e:
 			print e.message
 			print 'Could not calculate property: {}'.format(prop['name'])

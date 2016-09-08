@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import tempfile
 import string
@@ -26,20 +27,22 @@ class RNAPlotter(object):
 	def create_plot(self, fmt='svg'):
 		seq_name = RNAPlotter._create_random_seq_name()
 		in_file_name = tempfile.gettempdir() + os.sep + 'rnaplot_input.txt'
-		out_file_name = '{}_ss.{}'.format(seq_name, fmt)
 		self._write_input(in_file_name, seq_name)
 		command = 'cat {} | {} -o {}'.format(in_file_name, RNAPlotter._get_rnaplot_app(), fmt)
 		
 		try:
+			out_file_name = '{}_ss.{}'.format(seq_name, fmt)
 			subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
 			assert os.path.exists(out_file_name), 'Could not find result of RNAPlot.'
+			temp_file_name = tempfile.gettempdir() + os.sep + out_file_name
+			shutil.move(out_file_name, temp_file_name)
 		except subprocess.CalledProcessError as e:
 			print e.message
-			out_file_name = ''
+			temp_file_name = ''
 
 		os.remove(in_file_name)
 
-		return out_file_name
+		return temp_file_name
 
 	def _write_input(self, fn, name):
 		with open(fn, 'w') as f:
