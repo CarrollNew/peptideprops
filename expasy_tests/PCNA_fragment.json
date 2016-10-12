@@ -1,0 +1,60 @@
+{
+    "results": [
+        {
+            "value": {
+                "H": 168, 
+                "C": 93, 
+                "S": 3, 
+                "O": 28, 
+                "N": 30
+            }, 
+            "property": "atom_count", 
+            "description": "", 
+            "unit": "", 
+            "name": "Atomic composition"
+        }, 
+        {
+            "value": 322, 
+            "property": "atom_num", 
+            "description": "", 
+            "unit": "", 
+            "name": "Total number of atoms"
+        }, 
+        {
+            "value": 1, 
+            "property": "neg_charged_res", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of negatively charged residues (Asp + Glu)"
+        }, 
+        {
+            "value": 4, 
+            "property": "pos_charged_res", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of positively charged residues (Arg + Lys)"
+        }, 
+        {
+            "value": 0, 
+            "property": "extinction_coefficient", 
+            "description": "(assuming all pairs of Cys residues form cystines)", 
+            "unit": "[1 / M / cm]", 
+            "name": "Extinction coefficient"
+        }, 
+        {
+            "value": 0, 
+            "property": "absorption_coefficient", 
+            "description": "(assuming all pairs of Cys residues form cystines)", 
+            "unit": "", 
+            "name": "Abs 0.1%"
+        }, 
+        {
+            "value": 97.5, 
+            "property": "aliphatic_index", 
+            "description": "", 
+            "unit": "", 
+            "name": "Aliphatic index"
+        }
+    ], 
+    "sequence": "RCDRNLAMGVNLTSMSKILK"
+}

@@ -1,0 +1,60 @@
+{
+    "results": [
+        {
+            "value": {
+                "H": 2020, 
+                "C": 1257, 
+                "S": 16, 
+                "O": 408, 
+                "N": 328
+            }, 
+            "property": "atom_count", 
+            "description": "", 
+            "unit": "", 
+            "name": "Atomic composition"
+        }, 
+        {
+            "value": 4029, 
+            "property": "atom_num", 
+            "description": "", 
+            "unit": "", 
+            "name": "Total number of atoms"
+        }, 
+        {
+            "value": 41, 
+            "property": "neg_charged_res", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of negatively charged residues (Asp + Glu)"
+        }, 
+        {
+            "value": 24, 
+            "property": "pos_charged_res", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of positively charged residues (Arg + Lys)"
+        }, 
+        {
+            "value": 16305, 
+            "property": "extinction_coefficient", 
+            "description": "(assuming all pairs of Cys residues form cystines)", 
+            "unit": "[1 / M / cm]", 
+            "name": "Extinction coefficient"
+        }, 
+        {
+            "value": 0.567, 
+            "property": "absorption_coefficient", 
+            "description": "(assuming all pairs of Cys residues form cystines)", 
+            "unit": "", 
+            "name": "Abs 0.1%"
+        }, 
+        {
+            "value": 94.87, 
+            "property": "aliphatic_index", 
+            "description": "", 
+            "unit": "", 
+            "name": "Aliphatic index"
+        }
+    ], 
+    "sequence": "MFEARLVQGSILKKVLEALKDLINEACWDISSSGVNLQSMDSSHVSLVQLTLRSEGFDTYRCDRNLAMGVNLTSMSKILKCAGNEDIITLRAEDNADTLALVFEAPNQEKVSDYEMKLMDLDVEQLGIPEQEYSCVVKMPSGEFARICRDLSHIGDAVVISCAKDGVKFSASGELGNGNIKLSQTSNVDKEEEAVTIEMNEPVQLTFALRYLNFFTKATPLSSTVTLSMSADVPLVVEYKIADMGHLKYYLAPKIEDEEGS"
+}

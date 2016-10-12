@@ -1,10 +1,8 @@
-import os
 import sys
 
-import urllib2
 from json import dumps, loads
 
-from peptide_props_factory import PeptidePropsFactory
+from sequence_property_wrapper import ProteinPropertyWrapper, RNAPropertyWrapper
 from seq_utils import rna_to_aa
 
 
@@ -21,30 +19,30 @@ def write_result(out_fn, result):
 def process(params):
 	if 'sequence' not in params:
 		return {'error': 'Invalid parameters', 'message': 'No mRNA sequence provided.'}
-	if 'properties' not in params:
+	if 'folding_temp' not in params:
 		return {'error': 'Invalid parameters', 'message': 'No settings provided.'}
-
 	rna_seq = params['sequence']
 	try:
 		aa_seq = rna_to_aa(rna_seq)
 	except StandardError as e:
-		return {'error': 'Invalid RNA sequence.', 'message': e.message}
+		return {'error': 'Invalid mRNA sequence.', 'message': e.message}
 
 	results = []
-	for prop in params['properties']:
-		try:
-			value = PeptidePropsFactory.from_prop_code(prop['name'])(
-				rna_seq, prop.get('settings', {})).calculate_prop()
-		except KeyError as e:
-			value = PeptidePropsFactory.from_long_name(prop['name'])(
-				rna_seq, prop.get('settings', {})).calculate_prop()
-		except StandardError as e:
-			print e.message
-			print 'Could not calculate property: {}'.format(prop['name'])
-			value = None
-		results.append({'property': prop['name'], 'value': value})
+	protein_analysis = ProteinPropertyWrapper(aa_seq)
+	results.extend(protein_analysis.molecular_weight())
+	results.extend(protein_analysis.composition())
+	results.extend(protein_analysis.extinction_coefficient())
+	results.extend(protein_analysis.absorption_coefficient())
+	results.extend(protein_analysis.half_life())
+	results.extend(protein_analysis.instability_index())
+	results.extend(protein_analysis.isoelectric_point())
+	results.extend(protein_analysis.aliphatic_index())
+	results.extend(protein_analysis.gravy())
+	rna_analysis = RNAPropertyWrapper(rna_seq)
+	results.extend(rna_analysis.folding())
 	result_dict = {'sequence': aa_seq, 'results': results}
 	return result_dict
+	
 
 
 def main(args):

@@ -1,27 +1,164 @@
 {
     "results": [
         {
-            "property": "extinction_coefficient", 
-            "value": 27640
-        }, 
-        {
-            "property": "isoelectric_point", 
-            "value": 4.72857666015625
-        }, 
-        {
-            "property": "instability_index", 
-            "value": 43.47619402985075
-        }, 
-        {
+            "value": 30181.520999999997, 
             "property": "molecular_weight", 
-            "value": 30181.520999999997
+            "description": "(at average resolution)", 
+            "unit": "[g / mol]", 
+            "name": "Molecular weight"
         }, 
         {
-            "property": "folding", 
+            "value": 30163.212044, 
+            "property": "molecular_weight", 
+            "description": "(at monoisotopic resolution)", 
+            "unit": "[g / mol]", 
+            "name": "Molecular weight"
+        }, 
+        {
             "value": {
-                "energy": -224.0, 
-                "folding": "...((..((...(((((((((((.(.....((((.((((((((...)))))))).))))....).))))))))))).))..))(((((.(((((((..((((((((..((...(((.(((.(..((((..((...(((((...............)))))....))..))))....).))))))..)).)))))))).....)))))))...)))))((((((((((.....(((((.......)))))(((((((.((....(((.((((((.(..(((((.((((......))))..))))).).)))))).))).....)).)))))))......(((((..((.((((((((((((.(((....((((((..(((((..((..((.(((((...))))).))..))..).))))..))))))...))).))).))))))))).)).)))))......(((((......((((((((((.......((....))......((((((((((((...((((((.(((((..((((...((((((....(((((.......)))))...))))))..((.((((.(((((((.........)))))))...)))).))))))..)))))..))))))...))))).)))))))...(((((......)))))((((((((.....))))))))...((((((((.(((((((((............(((.((................)).)))....))))))))).)))))))))))))))))))))))))))))))))..."
-            }
+                "A": 28, 
+                "C": 2, 
+                "E": 32, 
+                "D": 18, 
+                "G": 9, 
+                "F": 6, 
+                "I": 16, 
+                "H": 4, 
+                "K": 19, 
+                "M": 5, 
+                "L": 29, 
+                "N": 9, 
+                "Q": 9, 
+                "P": 7, 
+                "S": 25, 
+                "R": 13, 
+                "T": 11, 
+                "W": 2, 
+                "V": 13, 
+                "Y": 11
+            }, 
+            "property": "aa_count", 
+            "description": "", 
+            "unit": "", 
+            "name": "Amino acid composition"
+        }, 
+        {
+            "value": 268, 
+            "property": "aa_len", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of amino acids"
+        }, 
+        {
+            "value": {
+                "H": 2112, 
+                "C": 1326, 
+                "S": 7, 
+                "O": 434, 
+                "N": 354
+            }, 
+            "property": "atom_count", 
+            "description": "", 
+            "unit": "", 
+            "name": "Atomic composition"
+        }, 
+        {
+            "value": 4233, 
+            "property": "atom_num", 
+            "description": "", 
+            "unit": "", 
+            "name": "Total number of atoms"
+        }, 
+        {
+            "value": 50, 
+            "property": "neg_charged_res", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of negatively charged residues (Asp + Glu)"
+        }, 
+        {
+            "value": 32, 
+            "property": "neg_charged_res", 
+            "description": "", 
+            "unit": "", 
+            "name": "Number of negatively charged residues (Arg + Lys)"
+        }, 
+        {
+            "value": 27515, 
+            "property": "extinction_coefficient", 
+            "description": "(assuming all pairs of Cys residues form cystines)", 
+            "unit": "[1 / M / cm]", 
+            "name": "Extinction coefficient"
+        }, 
+        {
+            "value": 27390, 
+            "property": "extinction_coefficient", 
+            "description": "(assuming all pairs of Cys residues are reduced)", 
+            "unit": "[1 / M / cm]", 
+            "name": "Extinction coefficient"
+        }, 
+        {
+            "value": 0.9116505427277838, 
+            "property": "absorption_coefficient", 
+            "description": "(assuming all pairs of Cys residues form cystines)", 
+            "unit": "", 
+            "name": "Abs 0.1%"
+        }, 
+        {
+            "value": 0.9075089356828638, 
+            "property": "absorption_coefficient", 
+            "description": "(assuming all pairs of Cys residues are reduced)", 
+            "unit": "", 
+            "name": "Abs 0.1%"
+        }, 
+        {
+            "value": "30 hour", 
+            "property": "half_life", 
+            "description": "", 
+            "unit": "", 
+            "name": "Mammalian reticulocytes, in vitro"
+        }, 
+        {
+            "value": ">20 hour", 
+            "property": "half_life", 
+            "description": "", 
+            "unit": "", 
+            "name": "Yeast, in vivo"
+        }, 
+        {
+            "value": ">10 hour", 
+            "property": "half_life", 
+            "description": "", 
+            "unit": "", 
+            "name": "E. coli, in vivo"
+        }, 
+        {
+            "value": 43.47619402985075, 
+            "property": "instability_index", 
+            "description": "", 
+            "unit": "", 
+            "name": "Instability index"
+        }, 
+        {
+            "value": 4.72857666015625, 
+            "property": "isoelectric_point", 
+            "description": "", 
+            "unit": "", 
+            "name": "Isoelectric point"
+        }, 
+        {
+            "value": 90.0, 
+            "property": "aliphatic_index", 
+            "description": "", 
+            "unit": "", 
+            "name": "Aliphatic index"
+        }, 
+        {
+            "value": -0.4608208955223885, 
+            "property": "gravy", 
+            "description": "", 
+            "unit": "", 
+            "name": "Grand average of hydropathicity (GRAVY)"
         }
     ], 
     "sequence": "MSSDSSREENVYLAKLAEQAERYEEMVEFMEKVAKTVETEELTVEERNLLSVAYKNVIGARRASWRIISSIEQKEDSRGNSDHVSIIKDYRGKIETELSKICDGILNLLEAHLIPAASLAESKVFYLKMKGDYHRYLAEFKTGAERKEAAESTLVAYKSAQDIALADLAPTHPIRLGLALNFSVFYYEILNSSDRACSLAKQAFDEAISELDTLGEESYKDSTLIMQLLRDNLTLWTSDLNDEAGDDIKEAPKEVQKVDEQAQPPPSQ"

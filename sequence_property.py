@@ -2,8 +2,15 @@ import os
 import abc
 import subprocess
 import tempfile
+from collections import namedtuple
 
 from seq_utils import rna_to_aa, AA_LETTERS, RNA_LETTERS
+from seq_utils import aa_composition_table, aa_codes_table, atom_codes_table, aa_kd_table
+from seq_utils import aa_half_life
+
+
+FoldingResult = namedtuple('FoldingResult', ['folding', 'energy'])
+CompositionResult = namedtuple('CompositionResult', ['aa_count', 'aa_len', 'atom_count', 'atom_num'])
 
 
 class SequenceProperty(object):
@@ -27,16 +34,25 @@ class RNAProperty(SequenceProperty):
 		pass
 
 
-class MolecularWeight(PeptideProperty):
-	def __init__(self, rna_seq, params=None, monoisotopic=False):
-		self.aa_seq = rna_to_aa(rna_seq)
-		self.params = params
-		self.monoisotopic = monoisotopic
+class AbsorptionCoefficient(PeptideProperty):
+	def __init__(self, seq):
+		self.seq = seq
 
-	def calculate_prop(self):
-		weights = MolecularWeight._get_weights_table(self.monoisotopic)
-		return (sum(map(lambda letter: self.aa_seq.count(letter) * weights[letter], AA_LETTERS))
-			- (len(self.aa_seq) - 1) * MolecularWeight._get_water_weight(self.monoisotopic))
+	def calculate_prop(self, monoisotopic=False, cys_reduced=False):
+		mw = MolecularWeight(self.seq).calculate_prop(monoisotopic)
+		ext_coef = ExtinctionCoefficient(self.seq).calculate_prop(cys_reduced)
+		return ext_coef / mw
+
+
+class MolecularWeight(PeptideProperty):
+	def __init__(self, seq):
+		self.seq = seq
+
+	def calculate_prop(self, monoisotopic=False):
+		weights = MolecularWeight._get_weights_table(monoisotopic)
+		water_weight = MolecularWeight._get_water_weight(monoisotopic)
+		return (sum(map(lambda letter: self.seq.count(letter) * weights[letter], AA_LETTERS))
+			- (len(self.seq) - 1) * water_weight)
 
 	@staticmethod
 	def _get_weights_table(monoisotopic=False):
@@ -100,14 +116,13 @@ class MolecularWeight(PeptideProperty):
 
 
 class InstabilityIndex(PeptideProperty):
-	def __init__(self, rna_seq, params=None):
-		self.aa_seq = rna_to_aa(rna_seq)
-		self.params = params
+	def __init__(self, seq):
+		self.seq = seq
 
 	def calculate_prop(self):
 		pairwise_weights = InstabilityIndex._get_dipeptide_weights()
-		sum_weights = sum(map(lambda i: pairwise_weights[self.aa_seq[i:i+2]], xrange(len(self.aa_seq) - 1)))
-		return 10.0 * sum_weights / len(self.aa_seq)
+		sum_weights = sum(map(lambda i: pairwise_weights[self.seq[i:i+2]], xrange(len(self.seq) - 1)))
+		return 10.0 * sum_weights / len(self.seq)
 
 	@staticmethod
 	def _get_dipeptide_weights():
@@ -521,18 +536,17 @@ class IsoelectricPoint(PeptideProperty):
 	pKcterminal = {'D': 4.55, 'E': 4.75}
 	pKnterminal = {'A': 7.59, 'M': 7.0, 'S': 6.93, 'P': 8.36, 'T': 6.82, 'V': 7.44, 'E': 7.7}
 	charged_aas = ('K', 'R', 'H', 'D', 'E', 'C', 'Y')
-	
-	def __init__(self, rna_seq, params=None):
-		self.aa_seq = rna_to_aa(rna_seq)
-		self.params = params
-		self.aa_content = IsoelectricPoint._get_aa_content(self.aa_seq)
-		self.charged_aas_content = self._select_charged(self.aa_content)
+
+	def __init__(self, seq):
+		self.seq = seq
+		self.aa_count = SequenceComposition(seq).calculate_prop().aa_count
+		self.charged_aas_content = self._select_charged(self.aa_count)
 
 	def calculate_prop(self):
 		pos_pKs = dict(IsoelectricPoint.positive_pKs)
 		neg_pKs = dict(IsoelectricPoint.negative_pKs)
-		nterm = self.aa_seq[0]
-		cterm = self.aa_seq[-1]
+		nterm = self.seq[0]
+		cterm = self.seq[-1]
 		if nterm in IsoelectricPoint.pKnterminal:
 			pos_pKs['Nterm'] = IsoelectricPoint.pKnterminal[nterm]
 		if cterm in IsoelectricPoint.pKcterminal:
@@ -603,22 +617,16 @@ class IsoelectricPoint(PeptideProperty):
 		charged['Cterm'] = 1.0
 		return charged
 
-	@staticmethod
-	def _get_aa_content(seq):
-		return {let: seq.count(let) for let in AA_LETTERS}
-
 
 class ExtinctionCoefficient(PeptideProperty):
-	def __init__(self, rna_seq, params=None):
-		self.aa_seq = rna_to_aa(rna_seq)
-		self.params = params
-
-	def calculate_prop(self):
+	def __init__(self, seq):
+		self.seq = seq
+	
+	def calculate_prop(self, cys_reduced=False):
 		ext_params = ExtinctionCoefficient._get_ext_params()
 		return (
-			self.aa_seq.count('Y') * ext_params[0] 
-			+ self.aa_seq.count('W') * ext_params[1] 
-			+ self.aa_seq.count('C') * ext_params[2]
+			self.seq.count('Y') * ext_params[0] + self.seq.count('W') * ext_params[1]
+			+ int(not cys_reduced) * self.seq.count('C') / 2 * ext_params[2]
 		)
 
 	@staticmethod
@@ -630,7 +638,6 @@ class ExtinctionCoefficient(PeptideProperty):
 			276: [1450, 5400, 145],
 			278: [1400, 5600, 127],
 			279: [1345, 5660, 120],
-			# 280: [1280, 5690, 120],
 			280: [1490, 5500, 125],
 			282: [1200, 5600, 100]
 		}
@@ -638,6 +645,53 @@ class ExtinctionCoefficient(PeptideProperty):
 			return params_table[nm]
 		raise KeyError('Specified wavelength not found.')
 
+
+class SequenceComposition(PeptideProperty):
+	def __init__(self, seq):
+		self.seq = seq
+	
+	def calculate_prop(self):
+		aa_count = {k: self.seq.count(k) for k in AA_LETTERS}
+		aa_len = sum(aa_count.values())
+		atom_count = {
+			atom: sum(aa_composition_table[aa][atom] * aa_count[aa] for aa in aa_count)
+			for atom in atom_codes_table
+		}
+		atom_count['H'] -= 2 * (aa_len - 1)
+		atom_count['O'] -= (aa_len - 1)
+		atom_num = sum(atom_count.values())
+		return CompositionResult(aa_count, aa_len, atom_count, atom_num)
+
+
+class GRAVY(PeptideProperty):
+	def __init__(self, seq):
+		self.seq = seq
+
+	def calculate_prop(self):
+		return 1.0 * sum(aa_kd_table[aa] for aa in self.seq) / len(self.seq)
+
+
+class AliphaticIndex(PeptideProperty):
+	def __init__(self, seq):
+		self.seq = seq
+
+	def calculate_prop(self):
+		a = 2.9
+		b = 3.9
+		return 100.0 * (
+			self.seq.count('A') + a * self.seq.count('V') + b * (self.seq.count('I') + self.seq.count('L'))
+			) / len(self.seq)
+
+
+class HalfLife(PeptideProperty):
+	def __init__(self, seq):
+		self.seq = seq
+
+	def calculate_prop(self, cell_type):
+		nterm = self.seq[0]
+		assert cell_type in [0, 1, 2]
+		return aa_half_life[nterm][cell_type]
+		
 
 class FoldingMFE(RNAProperty):
 	possible_rnafold_paths = [
@@ -647,19 +701,15 @@ class FoldingMFE(RNAProperty):
 		'/usr/bin/RNAfold',
 		'/usr/local/bin/RNAfold'
 	]
+	
+	def __init__(self, seq):
+		self.seq = seq
 
-	def __init__(self, rna_seq, params=None):
-		self.rna_seq = rna_seq
-		self.params = params
-
-	def calculate_prop(self):
+	def calculate_prop(self, temp):
 		in_fasta = tempfile.gettempdir() + os.sep + 'rnafold_input.fasta'
 		out_fasta = tempfile.gettempdir() + os.sep + 'rnafold_output'
 		self._write_input(in_fasta)
-		command = [FoldingMFE._get_rnafold_app(), '-i', in_fasta, '-o', out_fasta, '--noPS']
-		if self.params:
-			if 'temp' in self.params:
-				command.extend(['-T', str(self.params['temp'])])
+		command = [FoldingMFE._get_rnafold_app(), '-i', in_fasta, '-o', out_fasta, '--noPS', '-T', str(temp)]
 		
 		try:
 			subprocess.check_output(command, stderr=subprocess.STDOUT)
@@ -671,7 +721,7 @@ class FoldingMFE(RNAProperty):
 	def _write_input(self, fn):
 		with open(fn, 'w') as f:
 			f.write('>sequence\n')
-			f.write('{}\n'.format(self.rna_seq))
+			f.write('{}\n'.format(self.seq))
 
 	def _parse_output(self, fn):
 		with open(fn) as f:
@@ -679,15 +729,7 @@ class FoldingMFE(RNAProperty):
 		strs = contents[-1].split()
 		folding = strs[0]
 		energy = float(strs[-1][1:-1])
-		return {'folding': folding, 'energy': energy}
-
-	@staticmethod
-	def _validate(rna_seq, params):
-		assert all(map(lambda letter: letter in RNA_LETTERS, rna_seq)), 'Not an RNA sequence.'
-		if params:
-			if 'temp' in params:
-				assert isinstance(params['temp'], float) or isinstance(params['temp'], int),\
-					'RNA environment temperature should be a number.'
+		return FoldingResult(folding, energy)
 
 	@staticmethod
 	def _get_rnafold_app():
