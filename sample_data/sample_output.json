@@ -78,10 +78,10 @@
         }, 
         {
             "value": 32, 
-            "property": "neg_charged_res", 
+            "property": "pos_charged_res", 
             "description": "", 
             "unit": "", 
-            "name": "Number of negatively charged residues (Arg + Lys)"
+            "name": "Number of positively charged residues (Arg + Lys)"
         }, 
         {
             "value": 27515, 
@@ -159,6 +159,20 @@
             "description": "", 
             "unit": "", 
             "name": "Grand average of hydropathicity (GRAVY)"
+        }, 
+        {
+            "value": "...((..((...(((((((((((.(.....((((.((((((((...)))))))).))))....).))))))))))).))..))(((((.(((((((..((((((((..((...(((.(((.(..((((..((...(((((...............)))))....))..))))....).))))))..)).)))))))).....)))))))...)))))((((((((((.....(((((.......)))))(((((((.((....(((.((((((.(..(((((.((((......))))..))))).).)))))).))).....)).)))))))......(((((..((.((((((((((((.(((....((((((..(((((..((..((.(((((...))))).))..))..).))))..))))))...))).))).))))))))).)).)))))......(((((......((((((((((.......((....))......((((((((((((...((((((.(((((..((((...((((((....(((((.......)))))...))))))..((.((((.(((((((.........)))))))...)))).))))))..)))))..))))))...))))).)))))))...(((((......)))))((((((((.....))))))))...((((((((.(((((((((............(((.((................)).)))....))))))))).)))))))))))))))))))))))))))))))))...", 
+            "property": "folding", 
+            "description": "", 
+            "unit": "", 
+            "name": "RNA structure in bracket format"
+        }, 
+        {
+            "value": -224.0, 
+            "property": "energy", 
+            "description": "", 
+            "unit": "[kcal / mol]", 
+            "name": "RNA minimum free energy"
         }
     ], 
     "sequence": "MSSDSSREENVYLAKLAEQAERYEEMVEFMEKVAKTVETEELTVEERNLLSVAYKNVIGARRASWRIISSIEQKEDSRGNSDHVSIIKDYRGKIETELSKICDGILNLLEAHLIPAASLAESKVFYLKMKGDYHRYLAEFKTGAERKEAAESTLVAYKSAQDIALADLAPTHPIRLGLALNFSVFYYEILNSSDRACSLAKQAFDEAISELDTLGEESYKDSTLIMQLLRDNLTLWTSDLNDEAGDDIKEAPKEVQKVDEQAQPPPSQ"
