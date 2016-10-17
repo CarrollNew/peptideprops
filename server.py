@@ -62,6 +62,13 @@ def process_post_request():
 	return jsonify(process(params))
 
 
+@app.route('/api/folding', methods=['POST'])
+@crossdomain(origin='*')
+def process_folding():
+    params = request.get_json()
+    return jsonify(process(params, aa_props=False))
+
+
 @app.route('/api/get_ss_image', methods=['POST'])
 @crossdomain(origin='*')
 def process_ss():

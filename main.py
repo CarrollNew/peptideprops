@@ -16,33 +16,36 @@ def write_result(out_fn, result):
 		f.write(dumps(result, indent=4))
 
 
-def process(params):
+def process(params, aa_props=True):
 	if 'sequence' not in params:
 		return {'error': 'Invalid parameters', 'message': 'No mRNA sequence provided.'}
 	if 'folding_temp' not in params:
 		return {'error': 'Invalid parameters', 'message': 'No settings provided.'}
 	rna_seq = params['sequence']
-	try:
-		aa_seq = rna_to_aa(rna_seq)
-	except StandardError as e:
-		return {'error': 'Invalid mRNA sequence.', 'message': e.message}
-
 	results = []
-	protein_analysis = ProteinPropertyWrapper(aa_seq)
-	results.extend(protein_analysis.molecular_weight())
-	results.extend(protein_analysis.composition())
-	results.extend(protein_analysis.extinction_coefficient())
-	results.extend(protein_analysis.absorption_coefficient())
-	results.extend(protein_analysis.half_life())
-	results.extend(protein_analysis.instability_index())
-	results.extend(protein_analysis.isoelectric_point())
-	results.extend(protein_analysis.aliphatic_index())
-	results.extend(protein_analysis.gravy())
+	if aa_props:
+		try:
+			aa_seq = rna_to_aa(rna_seq)
+		except StandardError as e:
+			return {'error': 'Invalid mRNA sequence.', 'message': e.message}
+
+		protein_analysis = ProteinPropertyWrapper(aa_seq)
+		results.extend(protein_analysis.molecular_weight())
+		results.extend(protein_analysis.composition())
+		results.extend(protein_analysis.extinction_coefficient())
+		results.extend(protein_analysis.absorption_coefficient())
+		results.extend(protein_analysis.half_life())
+		results.extend(protein_analysis.instability_index())
+		results.extend(protein_analysis.isoelectric_point())
+		results.extend(protein_analysis.aliphatic_index())
+		results.extend(protein_analysis.gravy())
+		result_seq = aa_seq
+	else:
+		result_seq = rna_seq
 	rna_analysis = RNAPropertyWrapper(rna_seq)
-	results.extend(rna_analysis.folding())
-	result_dict = {'sequence': aa_seq, 'results': results}
+	results.extend(rna_analysis.folding(temp=params['folding_temp']))
+	result_dict = {'sequence': result_seq, 'results': results}
 	return result_dict
-	
 
 
 def main(args):
