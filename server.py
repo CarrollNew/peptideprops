@@ -66,7 +66,10 @@ def process_post_request():
 @crossdomain(origin='*')
 def process_folding():
     params = request.get_json()
-    return jsonify(process(params, aa_props=False))
+    result = process(params, aa_props=False)
+    formatted_result = {item['property']: item['value'] for item in result['results']}
+    formatted_result['sequence'] = result['sequence']
+    return jsonify(formatted_result)
 
 
 @app.route('/api/get_ss_image', methods=['POST'])
