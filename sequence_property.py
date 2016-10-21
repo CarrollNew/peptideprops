@@ -728,7 +728,7 @@ class FoldingMFE(RNAProperty):
 			contents = f.read().splitlines()
 		strs = contents[-1].split()
 		folding = strs[0]
-		energy = float(strs[-1][1:-1])
+		energy = float(strs[-1][:-1].replace('(', '').replace(')', ''))
 		return FoldingResult(folding, energy)
 
 	@staticmethod
