@@ -26,14 +26,14 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 		return [
 			{
 				'property': 'absorption_coefficient',
-				'description': '(assuming all pairs of Cys residues form cystines)',
+				'description': 'assuming all pairs of Cys residues form cystines',
 				'name': 'Abs 0.1%',
 				'unit': '',
 				'value': AbsorptionCoefficient(self.seq).calculate_prop()
 			},
 			{
 				'property': 'absorption_coefficient',
-				'description': '(assuming all pairs of Cys residues are reduced)',
+				'description': 'assuming all pairs of Cys residues are reduced',
 				'name': 'Abs 0.1%',
 				'unit': '',
 				'value': AbsorptionCoefficient(self.seq).calculate_prop(cys_reduced=True)
@@ -100,16 +100,16 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 		return [
 			{
 				'property': 'extinction_coefficient',
-				'description': '(assuming all pairs of Cys residues form cystines)',
+				'description': 'assuming all pairs of Cys residues form cystines',
 				'name': 'Extinction coefficient',
-				'unit': '[1 / M / cm]',
+				'unit': '1 / M / cm',
 				'value': ExtinctionCoefficient(self.seq).calculate_prop()
 			},
 			{
 				'property': 'extinction_coefficient',
-				'description': '(assuming all pairs of Cys residues are reduced)',
+				'description': 'assuming all pairs of Cys residues are reduced',
 				'name': 'Extinction coefficient',
-				'unit': '[1 / M / cm]',
+				'unit': '1 / M / cm',
 				'value': ExtinctionCoefficient(self.seq).calculate_prop(cys_reduced=True)
 			}
 		]
@@ -128,10 +128,10 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 		return [{
 			'property': 'half_life',
 			'description': '',
-			'name': headers[i],
+			'name': 'Estimated half-life',
 			'unit': '',
-			'value': HalfLife(self.seq).calculate_prop(i)
-		} for i in xrange(len(headers))]
+			'value': {headers[i]: HalfLife(self.seq).calculate_prop(i) for i in xrange(len(headers))}
+		}]
 
 	def instability_index(self):
 		return [{
@@ -155,16 +155,16 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 		return [
 			{
 				'property': 'molecular_weight',
-				'description': '(at average resolution)',
+				'description': 'at average resolution',
 				'name': 'Molecular weight',
-				'unit': '[g / mol]',
+				'unit': 'g / mol',
 				'value': MolecularWeight(self.seq).calculate_prop()
 			},
 			{
 				'property': 'molecular_weight',
-				'description': '(at monoisotopic resolution)',
+				'description': 'at monoisotopic resolution',
 				'name': 'Molecular weight',
-				'unit': '[g / mol]',
+				'unit': 'g / mol',
 				'value': MolecularWeight(self.seq).calculate_prop(monoisotopic=True)
 			}
 		]
@@ -188,7 +188,7 @@ class RNAPropertyWrapper(SequencePropertyWrapper):
 				'property': 'energy',
 				'description': '',
 				'name': 'RNA minimum free energy',
-				'unit': '[kcal / mol]',
+				'unit': 'kcal / mol',
 				'value': res.energy
 			}
 		]
