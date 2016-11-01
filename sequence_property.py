@@ -695,33 +695,43 @@ class HalfLife(PeptideProperty):
 
 class FoldingMFE(RNAProperty):
 	possible_rnafold_paths = [
+		'/usr/local/bin/RNAfold',
 		'C://Program Files (x86)//ViennaRNA Package//RNAfold.exe',
 		'/usr/local/bin/ViennaRNA/RNAfold',
 		'/usr/bin/ViennaRNA/RNAfold',
-		'/usr/bin/RNAfold',
-		'/usr/local/bin/RNAfold'
+		'/usr/bin/RNAfold'
 	]
 	
-	def __init__(self, seq):
-		self.seq = seq
+	def __init__(self, sequences):
+		self.sequences = sequences
 
 	def calculate_prop(self, temp):
 		in_fasta = tempfile.gettempdir() + os.sep + 'rnafold_input.fasta'
 		out_fasta = tempfile.gettempdir() + os.sep + 'rnafold_output'
-		self._write_input(in_fasta)
-		command = [FoldingMFE._get_rnafold_app(), '-i', in_fasta, '-o', out_fasta, '--noPS', '-T', str(temp)]
-		
+		seq_names = self._write_input(in_fasta)
+		command = [
+			FoldingMFE._get_rnafold_app(), 
+			'-i', in_fasta, 
+			'-o', out_fasta, 
+			'--noPS', 
+			'-T', str(temp)
+		]
 		try:
 			subprocess.check_output(command, stderr=subprocess.STDOUT)
 		except subprocess.CalledProcessError as e:
 			print e.message
-
-		return self._parse_output(out_fasta + '_sequence.fold')
+		return self._read_results(out_fasta, seq_names)
 
 	def _write_input(self, fn):
+		names = map(lambda i: 'sequence_{}'.format(i), xrange(len(self.sequences)))
 		with open(fn, 'w') as f:
-			f.write('>sequence\n')
-			f.write('{}\n'.format(self.seq))
+			for i in xrange(len(self.sequences)):
+				f.write('>{}\n'.format(names[i]))
+				f.write('{}\n'.format(self.sequences[i]))
+		return names
+
+	def _read_results(self, out_fasta, seq_names):
+		return map(lambda name: self._parse_output(out_fasta + '_{}.fold'.format(name)), seq_names)
 
 	def _parse_output(self, fn):
 		with open(fn) as f:

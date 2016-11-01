@@ -12,11 +12,11 @@ from seq_utils import RNA_LETTERS
 
 class RNAPlotter(object):
 	possible_rnaplot_paths = [
+		'/usr/local/bin/RNAplot',
 		'C://Program Files (x86)//ViennaRNA Package//RNAplot.exe',
 		'/usr/local/bin/ViennaRNA/RNAplot',
 		'/usr/bin/ViennaRNA/RNAplot',
-		'/usr/bin/RNAplot',
-		'/usr/local/bin/RNAplot'
+		'/usr/bin/RNAplot'
 	]
 
 	def __init__(self, rna_seq, rna_ss, params=None):

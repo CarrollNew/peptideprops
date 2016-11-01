@@ -5,7 +5,7 @@ from functools import update_wrapper
 from flask import Flask, jsonify, request, make_response, send_file, current_app
 from werkzeug.contrib.fixers import ProxyFix
 
-from main import process
+from main import process, process_batch_folding
 from plotter import RNAPlotter
 
 
@@ -66,10 +66,7 @@ def process_post_request():
 @crossdomain(origin='*')
 def process_folding():
     params = request.get_json()
-    result = process(params, aa_props=False)
-    formatted_result = {item['property']: item['value'] for item in result['results']}
-    formatted_result['sequence'] = result['sequence']
-    return jsonify(formatted_result)
+    return jsonify(process_batch_folding(params))
 
 
 @app.route('/api/get_ss_image', methods=['POST'])

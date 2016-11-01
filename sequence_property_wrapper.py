@@ -171,24 +171,28 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 
 
 class RNAPropertyWrapper(SequencePropertyWrapper):
-	def __init__(self, seq):
-		self.seq = seq
+	def __init__(self, sequences):
+		self.sequences = sequences
 
-	def folding(self, temp=37):
-		res = FoldingMFE(self.seq).calculate_prop(temp)
-		return [
-			{
-				'property': 'folding',
-				'description': '',
-				'name': 'RNA structure in bracket format',
-				'unit': '',
-				'value': res.folding
-			},
-			{
-				'property': 'energy',
-				'description': '',
-				'name': 'RNA minimum free energy',
-				'unit': 'kcal / mol',
-				'value': res.energy
-			}
-		]
+	def folding(self, temp=37, be_concise=False):
+		res = FoldingMFE(self.sequences).calculate_prop(temp)
+		if be_concise:
+			return [{'folding': item.folding, 'energy': item.energy} for item in res]
+		else:
+			assert len(res) == 1
+			return [
+				{
+					'property': 'folding',
+					'description': '',
+					'name': 'RNA structure in bracket format',
+					'unit': '',
+					'value': res[0].folding
+				},
+				{
+					'property': 'energy',
+					'description': '',
+					'name': 'RNA minimum free energy',
+					'unit': 'kcal / mol',
+					'value': res[0].energy
+				}
+			]
