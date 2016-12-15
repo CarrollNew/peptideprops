@@ -50,6 +50,7 @@ def process(params):
 		protein_results.extend(protein_analysis.isoelectric_point())
 		protein_results.extend(protein_analysis.aliphatic_index())
 		protein_results.extend(protein_analysis.gravy())
+		protein_results.extend(protein_analysis.sequence())
 		results[sequence_type] = protein_results
 		return results
 	return {'error': 'Invalid parameters', 'message': 'Invalid sequence type.'}

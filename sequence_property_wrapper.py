@@ -169,6 +169,12 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 			}
 		]
 
+	def sequence(self):
+		return [{
+			'property': 'sequence',
+			'value': self.seq
+		}]
+
 
 class RNAPropertyWrapper(SequencePropertyWrapper):
 	def __init__(self, sequences):
