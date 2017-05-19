@@ -1,0 +1,239 @@
+#%RAML 1.0
+title: ProtParams
+baseUri: http://192.168.40.36:9000
+protocols: [ HTTP ]
+version: 1.0
+mediaType: application/json
+documentation:
+  - title: Описание
+    content: Документ описывает протокол общения FE/BE для сервиса ProtParams.
+/api:
+  /process:
+    post:
+      description: Вычисление свойств заданной последовательности.
+      queryParameters:
+        sequence:
+          type: string
+          description: Последовательность, свойства которой требуется вычислить.
+          required: true
+        type:
+          type: string
+          description: "Тип последовательности - mRNA или Protein."
+          required: true
+        folding_temp:
+          type: double
+          description: "Температура фолдинга мРНК по шкале Цельсия."
+          required: false
+      body:
+        application/json:
+          example: '{
+            "sequence": "CUGGAUCGCAAUGACGCUCUUAGGUCUCGU",
+            "type": "mRNA",
+            "folding_temp": 37
+          }'
+      responses:
+        200:
+          body:
+            application/json:
+              example: '{
+                "Protein": [
+                	{
+                	  "description": "at average resolution",
+                	  "name": "Molecular weight",
+                	  "property": "molecular_weight",
+                	  "unit": "g / mol",
+                	  "value": 1215.3201999999999
+                	},
+                	{
+                	  "description": "at monoisotopic resolution",
+                	  "name": "Molecular weight",
+                	  "property": "molecular_weight",
+                	  "unit": "g / mol",
+                	  "value": 1214.64798
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Amino acid composition",
+                	  "property": "aa_count",
+                	  "unit": "",
+                	  "value": {
+                	    "A": 1,
+                	    "C": 0,
+                	    "D": 2,
+                	    "E": 0,
+                	    "F": 0,
+                	    "G": 0,
+                	    "H": 0,
+                	    "I": 0,
+                	    "K": 0,
+                	    "L": 2,
+                	    "M": 0,
+                	    "N": 1,
+                	    "P": 0,
+                	    "Q": 0,
+                	    "R": 3,
+                	    "S": 1,
+                	    "T": 0,
+                	    "V": 0,
+                	    "W": 0,
+                	    "Y": 0
+                	  }
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Number of amino acids",
+                	  "property": "aa_len",
+                	  "unit": "",
+                	  "value": 10
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Atomic composition",
+                	  "property": "atom_count",
+                	  "unit": "",
+                	  "value": {
+                	  	"C": 48,
+                	  	"H": 86,
+                	  	"N": 20,
+                	  	"O": 17,
+                	  	"S": 0
+                	  }
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Total number of atoms",
+                	  "property": "atom_num",
+                	  "unit": "",
+                	  "value": 171
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Number of negatively charged residues (Asp + Glu)",
+                	  "property": "neg_charged_res",
+                	  "unit": "",
+                	  "value": 2
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Number of positively charged residues (Arg + Lys)",
+                	  "property": "pos_charged_res",
+                	  "unit": "",
+                	  "value": 3
+                	},
+                	{
+                	  "description": "assuming all pairs of Cys residues form cystines",
+                	  "name": "Extinction coefficient",
+                	  "property": "extinction_coefficient",
+                	  "unit": "1 / M / cm",
+                	  "value": 0
+                	},
+                	{
+                	  "description": "assuming all pairs of Cys residues are reduced",
+                	  "name": "Extinction coefficient",
+                	  "property": "extinction_coefficient",
+                	  "unit": "1 / M / cm",
+                	  "value": 0
+                	},
+                	{
+                	  "description": "assuming all pairs of Cys residues form cystines",
+                	  "name": "Abs 0.1%",
+                	  "property": "absorption_coefficient",
+                	  "unit": "",
+                	  "value": 0.0
+                	},
+                	{
+                	  "description": "assuming all pairs of Cys residues are reduced",
+                	  "name": "Abs 0.1%",
+                	  "property": "absorption_coefficient",
+                	  "unit": "",
+                	  "value": 0.0
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Estimated half-life",
+                	  "property": "half_life",
+                	  "unit": "",
+                	  "value": {
+                	    "E. coli, in vivo": "2 min",
+                	    "Mammalian reticulocytes, in vitro": "5.5 hour",
+                	    "Yeast, in vivo": "3 min"
+                	  }
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Instability index",
+                	  "property": "instability_index",
+                	  "unit": "",
+                	  "value": 96.26
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Isoelectric point",
+                	  "property": "isoelectric_point",
+                	  "unit": "",
+                	  "value": 9.51019287109375
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Aliphatic index",
+                	  "property": "aliphatic_index",
+                	  "unit": "",
+                	  "value": 88.00000000000001
+                	},
+                	{
+                	  "description": "",
+                	  "name": "Grand average of hydropathicity (GRAVY)",
+                	  "property": "gravy",
+                	  "unit": "",
+                	  "value": -1.5399999999999998
+                	},
+                	{
+                	  "property": "sequence",
+                	  "value": "LDRNDALRSR"
+                	}
+                ],
+                "mRNA": [
+                	{
+                	  "description": "",
+                	  "name": "RNA structure in bracket format",
+                	  "property": "folding",
+                	  "unit": "",
+                	  "value": "..(((((((......)).....)))))..."
+                	},
+                	{
+                	  "description": "",
+                	  "name": "RNA minimum free energy",
+                	  "property": "energy",
+                	  "unit": "kcal / mol",
+                	  "value": -2.9
+                	}
+                ]
+              }'
+  /folding:
+    post:
+      description: Вычисление вторичной структуры для списка последовательностей РНК.
+      queryParameters:
+        sequences:
+          type: list of string
+          description: Список последовательностей РНК.
+          required: true
+        folding_temp:
+          type: double
+          description: Температура фолдинга РНК по шкале Цельсия.
+          required: true
+      body:
+        application/json:
+          example: '{
+            "sequences": ["CUGGAU", "CGCAAUG", "ACGCUCUU", "AGGUCUCGU"],
+            "folding_temp": 37
+          }'
+      responses:
+        200:
+          body:
+            application/json:
+              example: '[
+                {"energy": 0.0, "folding": "......"},
+                {"energy": 0.0, "folding": "......."},
+                {"energy": 0.0, "folding": "........"},
+                {"energy": 0.0, "folding": "........."}
+              ]'
