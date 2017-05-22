@@ -3,7 +3,7 @@ import sys
 from json import dumps, loads
 
 from sequence_property_wrapper import ProteinPropertyWrapper, RNAPropertyWrapper
-from seq_utils import rna_to_aa, AA_LETTERS, RNA_LETTERS
+from seq_utils import dna_to_rna, rna_to_aa, AA_LETTERS, RNA_LETTERS, DNA_LETTERS
 
 
 def _read_params(fn):
@@ -19,14 +19,16 @@ def _write_result(out_fn, result):
 def process(params):
 	sequence = params.get('sequence', None)
 	sequence_type = params.get('type', None)
-	folding_temp = params.get('folding_temp', None)
+	folding_temp = params.get('folding_temp', 37)
 	if not sequence:
 		return {'error': 'Invalid parameters', 'message': 'No mRNA sequence provided.'}
 	if not sequence_type:
 		return {'error': 'Invalid parameters', 'message': 'No sequence type provided.'}
 	results = {}
 	if sequence_type == 'mRNA':
-		if not all(map(lambda let: let in RNA_LETTERS, sequence)):
+		if all(map(lambda let: let in DNA_LETTERS, sequence)):
+			sequence = dna_to_rna(sequence)
+		elif any(map(lambda let: let not in RNA_LETTERS, sequence)):
 			return {'error': 'Not an RNA sequence.'}
 		rna_results = []
 		rna_results = RNAPropertyWrapper([sequence]).folding(temp=folding_temp)

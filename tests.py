@@ -5,8 +5,8 @@ The module tests implemented calculation versus Biopython/ExPASy results.
 import unittest
 import os
 from json import loads
+from random import choice, sample
 
-import numpy as np
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 from sequence_property import (
@@ -20,7 +20,8 @@ from sequence_property import (
 	AbsorptionCoefficient,
 	AliphaticIndex
 )
-from seq_utils import rna_codon_table, rna_to_aa, RNA_LETTERS
+from seq_utils import rna_codon_table, rna_to_aa, RNA_LETTERS, DNA_LETTERS, AA_LETTERS
+from main import process
 
 
 class BioTests(unittest.TestCase):
@@ -115,14 +116,34 @@ class BioTests(unittest.TestCase):
 
 	@staticmethod
 	def _gen_random_mrna(peptide_len=30):
-		return ''.join(np.random.choice(rna_codon_table.keys(), size=peptide_len, replace=True))
+		return ''.join(map(lambda _: choice(rna_codon_table.keys()), xrange(peptide_len)))
 
 	@staticmethod
 	def _is_value_valid(ref_value, value):
 		if isinstance(ref_value, int) and isinstance(value, int):
 			return ref_value == value
 		elif isinstance(ref_value, float) or isinstance(value, float):
-			return np.isclose(ref_value, value, rtol=0.01)
+			rtol = 0.01
+			return abs(ref_value - value) <= rtol * abs(ref_value)
+
+
+class Tests(unittest.TestCase):
+	def test_correct(self):
+		for sz in xrange(10, 101):
+			self.assertTrue('error' not in process({'sequence': Tests._get_random_seq(AA_LETTERS), 'type': 'Protein'}))
+			self.assertTrue('error' not in process({'sequence': Tests._get_random_seq(RNA_LETTERS), 'type': 'mRNA'}))
+			self.assertTrue('error' not in process({'sequence': Tests._get_random_seq(DNA_LETTERS), 'type': 'mRNA'}))
+
+	def test_incorrect(self):
+		for sz in xrange(10, 101):
+			seq = Tests._get_random_seq(RNA_LETTERS + DNA_LETTERS)
+			res = process({'sequence': seq, 'type': 'mRNA'})
+			if 'T' in seq and 'U' in seq:
+				self.assertTrue('error' in res)
+
+	@staticmethod
+	def _get_random_seq(alphabet, sz=30):
+		return ''.join(map(lambda _: choice(alphabet), xrange(sz)))
 
 
 if __name__ == '__main__':
