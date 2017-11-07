@@ -27,14 +27,14 @@ class ProteinPropertyWrapper(SequencePropertyWrapper):
 			{
 				'property': 'absorption_coefficient',
 				'description': 'assuming all pairs of Cys residues form cystines',
-				'name': 'Abs 0.1%',
+				'name': 'Abs 0.1% (= 1 mg/ml)',
 				'unit': '',
 				'value': AbsorptionCoefficient(self.seq).calculate_prop()
 			},
 			{
 				'property': 'absorption_coefficient',
 				'description': 'assuming all pairs of Cys residues are reduced',
-				'name': 'Abs 0.1%',
+				'name': 'Abs 0.1% (= 1 mg/ml)',
 				'unit': '',
 				'value': AbsorptionCoefficient(self.seq).calculate_prop(cys_reduced=True)
 			}
